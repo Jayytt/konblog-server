@@ -1,0 +1,7 @@
+﻿.idea/
+target/
+*.iml
+.vite/
+node_modules/
+.env.local
+*.log
