@@ -13,4 +13,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(\
+@RequestMapping("/user")
+@SaCheckRole("admin")
+@RequiredArgsConstructor
+public class UserAdminController {
+    private final UserService userService;
+    @GetMapping("/admin/page") public Result<PageVO<UserVO>> page(@RequestParam(defaultValue="1") long current, @RequestParam(defaultValue="10") long size) {
+        Page<User> p = userService.page(new Page<>(current, size));
+        List<UserVO> vos = p.getRecords().stream().map(u -> {
+            UserVO vo = new UserVO(); BeanUtils.copyProperties(u, vo); vo.setRoleIds(userService.getRoleIds(u.getId())); return vo;
+        }).toList();
+        Page<UserVO> vp = new Page<>(current, size, p.getTotal()); vp.setRecords(vos);
+        return Result.success(PageVO.of(vp));
+    }
+    @PostMapping("/admin") public Result<Void> create(@RequestBody UserDTO dto) { userService.create(dto); return Result.success(); }
+    @PutMapping("/admin") public Result<Void> update(@RequestBody UserDTO dto) { userService.update(dto); return Result.success(); }
+    @DeleteMapping("/admin/{id}") public Result<Void> delete(@PathVariable Long id) { userService.delete(id); return Result.success(); }
+}

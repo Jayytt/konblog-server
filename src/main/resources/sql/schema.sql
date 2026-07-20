@@ -1,4 +1,4 @@
-﻿-- KonBlog Schema (MySQL 8+)
+-- KonBlog Schema (MySQL 8+)
 CREATE DATABASE IF NOT EXISTS kon_blog DEFAULT CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE kon_blog;
 SET NAMES utf8mb4;

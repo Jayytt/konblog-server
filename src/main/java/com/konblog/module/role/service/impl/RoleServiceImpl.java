@@ -24,4 +24,15 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
     @Override @Transactional public void update(RoleDTO dto) {
         Role r = getById(dto.getId()); if (r == null) return;
-        BeanUtils.copyProperties(dto, r, \
+        BeanUtils.copyProperties(dto, r, "id"); updateById(r);
+        roleMenuMapper.delete(new LambdaQueryWrapper<RoleMenu>().eq(RoleMenu::getRoleId, dto.getId()));
+        if (dto.getMenuIds() != null) assignMenus(dto.getId(), dto.getMenuIds());
+    }
+    @Override public void delete(Long id) { removeById(id); }
+    @Override public List<Long> getMenuIds(Long roleId) {
+        return roleMenuMapper.selectList(new LambdaQueryWrapper<RoleMenu>().eq(RoleMenu::getRoleId, roleId)).stream().map(RoleMenu::getMenuId).toList();
+    }
+    @Override public void assignMenus(Long roleId, List<Long> menuIds) {
+        for (Long mid : menuIds) { RoleMenu rm = new RoleMenu(); rm.setRoleId(roleId); rm.setMenuId(mid); roleMenuMapper.insert(rm); }
+    }
+}

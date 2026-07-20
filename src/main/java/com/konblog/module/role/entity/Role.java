@@ -9,6 +9,5 @@ import java.time.LocalDateTime;
 public class Role implements Serializable {
     @TableId(type = IdType.AUTO) private Long id;
     private String name, roleKey, status, delFlag;
-    private LocalDateTime createTime, updateTime;
-    private Long createBy, updateBy;
+    private LocalDateTime createTime, updateTime; private Long createBy, updateBy;
 }

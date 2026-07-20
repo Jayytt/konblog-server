@@ -8,6 +8,5 @@ import java.io.Serializable;
 @Data
 @TableName("sys_role_menu")
 public class RoleMenu implements Serializable {
-    @TableId(type = IdType.AUTO) private Long id;
-    private Long roleId, menuId;
+    @TableId(type = IdType.AUTO) private Long id; private Long roleId, menuId;
 }

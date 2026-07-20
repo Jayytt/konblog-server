@@ -25,4 +25,8 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     @Override public void update(CategoryDTO dto) {
         Category e = getById(dto.getId());
         if (e == null) return;
-        BeanUtils.copyProperties(dto, e, \
+        BeanUtils.copyProperties(dto, e, "id");
+        updateById(e);
+    }
+    @Override public void delete(Long id) { removeById(id); }
+}

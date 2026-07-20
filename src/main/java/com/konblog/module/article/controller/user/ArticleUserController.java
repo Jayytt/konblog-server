@@ -8,4 +8,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(\
+@RequestMapping("/article/user")
+@RequiredArgsConstructor
+public class ArticleUserController {
+    private final ArticleService articleService;
+    @GetMapping("/page") public Result<PageVO<ArticleListVO>> page(@RequestParam(defaultValue="1") long current, @RequestParam(defaultValue="10") long size) {
+        return Result.success(articleService.pageList(current, size));
+    }
+    @GetMapping("/{id}") public Result<ArticleDetailVO> detail(@PathVariable Long id) {
+        return Result.success(articleService.getDetail(id));
+    }
+}

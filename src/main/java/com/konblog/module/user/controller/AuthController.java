@@ -1,5 +1,4 @@
 package com.konblog.module.user.controller;
-import cn.dev33.satoken.annotation.SaCheckRole;
 import com.konblog.annotation.SystemLog;
 import com.konblog.common.result.Result;
 import com.konblog.module.user.dto.LoginDTO;

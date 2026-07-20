@@ -20,8 +20,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         return list(new LambdaQueryWrapper<Comment>().orderByDesc(Comment::getCreateTime));
     }
     @Override public Long create(CommentDTO dto) {
-        Comment c = new Comment(); BeanUtils.copyProperties(dto, c);
-        save(c); return c.getId();
+        Comment c = new Comment(); BeanUtils.copyProperties(dto, c); save(c); return c.getId();
     }
     @Override public void delete(Long id) { removeById(id); }
 }

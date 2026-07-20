@@ -20,20 +20,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private final UserRoleMapper userRoleMapper;
     private final PasswordEncoder passwordEncoder;
 
-    @Override public List<UserVO> listAll() {
-        return list().stream().map(u -> {
-            UserVO vo = new UserVO(); BeanUtils.copyProperties(u, vo); vo.setRoleIds(userService_getRoleIds(u.getId())); return vo;
-        }).toList();
-    }
-
-    private List<Long> userService_getRoleIds(Long userId) {
+    private List<Long> getRoleIdsInternal(Long userId) {
         return userRoleMapper.selectList(new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<UserRole>().eq(UserRole::getUserId, userId)).stream().map(UserRole::getRoleId).toList();
     }
 
-    @Override public UserVO getById(Long id) {
-        User u = getById(id); UserVO vo = new UserVO(); BeanUtils.copyProperties(u, vo); vo.setRoleIds(userService_getRoleIds(id)); return vo;
+    @Override public List<UserVO> listAll() {
+        return list().stream().map(u -> {
+            UserVO vo = new UserVO(); BeanUtils.copyProperties(u, vo); vo.setRoleIds(getRoleIdsInternal(u.getId()));
+            return vo;
+        }).toList();
     }
-
+    @Override public UserVO getById(Long id) {
+        User u = getById(id); UserVO vo = new UserVO(); BeanUtils.copyProperties(u, vo); vo.setRoleIds(getRoleIdsInternal(id)); return vo;
+    }
     @Override @Transactional public void create(UserDTO dto) {
         User u = new User(); BeanUtils.copyProperties(dto, u);
         if (dto.getPassword() != null && !dto.getPassword().startsWith("$2a")) {
@@ -44,22 +43,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             for (Long rid : dto.getRoleIds()) { UserRole ur = new UserRole(); ur.setUserId(u.getId()); ur.setRoleId(rid); userRoleMapper.insert(ur); }
         }
     }
-
     @Override @Transactional public void update(UserDTO dto) {
-        User u = getById(dto.getId());
-        if (u == null) return;
-        BeanUtils.copyProperties(dto, u, "id", "password");
-        updateById(u);
+        User u = getById(dto.getId()); if (u == null) return;
+        BeanUtils.copyProperties(dto, u, "id", "password"); updateById(u);
         userRoleMapper.delete(new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<UserRole>().eq(UserRole::getUserId, dto.getId()));
         if (dto.getRoleIds() != null) {
             for (Long rid : dto.getRoleIds()) { UserRole ur = new UserRole(); ur.setUserId(dto.getId()); ur.setRoleId(rid); userRoleMapper.insert(ur); }
         }
     }
-
     @Override public void delete(Long id) { removeById(id); }
-
-    @Override public List<Long> getRoleIds(Long userId) { return userService_getRoleIds(userId); }
-
+    @Override public List<Long> getRoleIds(Long userId) { return getRoleIdsInternal(userId); }
     @Override public void assignRoles(Long userId, List<Long> roleIds) {
         for (Long rid : roleIds) { UserRole ur = new UserRole(); ur.setUserId(userId); ur.setRoleId(rid); userRoleMapper.insert(ur); }
     }

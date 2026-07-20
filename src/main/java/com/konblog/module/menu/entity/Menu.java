@@ -9,8 +9,6 @@ import java.time.LocalDateTime;
 public class Menu implements Serializable {
     @TableId(type = IdType.AUTO) private Long id;
     private String menuName, path, component, perms, icon, menuType, remark;
-    private Long parentId;
-    private Integer orderNum, isCache, visible, status;
-    private LocalDateTime createTime, updateTime;
-    private Long createBy, updateBy;
+    private Long parentId; private Integer orderNum, isCache, visible, status;
+    private LocalDateTime createTime, updateTime; private Long createBy, updateBy;
 }

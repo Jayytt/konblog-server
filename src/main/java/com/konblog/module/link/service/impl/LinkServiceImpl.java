@@ -21,4 +21,7 @@ public class LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements Li
     }
     @Override public void update(LinkDTO dto) {
         Link l = getById(dto.getId());
-        if (l == null) return; BeanUtils.copyProperties(dto, l, \
+        if (l == null) return; BeanUtils.copyProperties(dto, l, "id"); updateById(l);
+    }
+    @Override public void delete(Long id) { removeById(id); }
+}

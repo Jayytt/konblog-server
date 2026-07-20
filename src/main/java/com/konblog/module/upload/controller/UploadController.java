@@ -10,4 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping(\
+@RequestMapping("/upload")
+@SaCheckRole("admin")
+@RequiredArgsConstructor
+public class UploadController {
+    private final UploadService uploadService;
+    @PostMapping public Result<String> upload(@RequestParam("file") MultipartFile file) {
+        return Result.success(uploadService.upload(file));
+    }
+}

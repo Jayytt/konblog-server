@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 public class User implements Serializable {
     @TableId(type = IdType.AUTO) private Long id;
     private String userName, password, nickName, email, phonenumber, sex, avatar, status, loginIp;
-    private LocalDateTime loginDate, createTime, updateTime;
-    private Long createBy, updateBy;
+    private LocalDateTime loginDate, createTime, updateTime; private Long createBy, updateBy;
     @TableLogic private Integer delFlag;
 }

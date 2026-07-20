@@ -4,4 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan(\
+@MapperScan("com.konblog.module.*.mapper")
+public class KonblogApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(KonblogApplication.class, args);
+    }
+}

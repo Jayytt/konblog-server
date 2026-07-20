@@ -33,10 +33,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         List<ArticleListVO> vos = page.getRecords().stream().map(a -> {
             ArticleListVO vo = new ArticleListVO();
             BeanUtils.copyProperties(a, vo);
-            try {
-                vo.setCategoryName(jdbc.queryForObject(
-                    "SELECT name FROM sg_category WHERE id = ?", String.class, a.getCategoryId()));
-            } catch (Exception e) { vo.setCategoryName("未分类"); }
+            try { vo.setCategoryName(jdbc.queryForObject("SELECT name FROM sg_category WHERE id = ?", String.class, a.getCategoryId())); }
+            catch (Exception e) { vo.setCategoryName("未分类"); }
             return vo;
         }).toList();
         Page<ArticleListVO> voPage = new Page<>(current, size, page.getTotal());
@@ -53,15 +51,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         ArticleDetailVO vo = new ArticleDetailVO();
         BeanUtils.copyProperties(a, vo);
         JdbcTemplate jdbc = new JdbcTemplate(dataSource);
-        try {
-            vo.setCategoryName(jdbc.queryForObject(
-                "SELECT name FROM sg_category WHERE id = ?", String.class, a.getCategoryId()));
-        } catch (Exception e) { vo.setCategoryName("未分类"); }
+        try { vo.setCategoryName(jdbc.queryForObject("SELECT name FROM sg_category WHERE id = ?", String.class, a.getCategoryId())); }
+        catch (Exception e) { vo.setCategoryName("未分类"); }
         return vo;
     }
 
-    @Override
-    @Transactional
+    @Override @Transactional
     public Long create(AddArticleDTO dto) {
         Article a = new Article();
         BeanUtils.copyProperties(dto, a);
@@ -70,36 +65,28 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         if (dto.getTagIds() != null) {
             for (Long tagId : dto.getTagIds()) {
                 ArticleTag at = new ArticleTag();
-                at.setArticleId(a.getId());
-                at.setTagId(tagId);
+                at.setArticleId(a.getId()); at.setTagId(tagId);
                 articleTagMapper.insert(at);
             }
         }
         return a.getId();
     }
 
-    @Override
-    @Transactional
+    @Override @Transactional
     public void update(AddArticleDTO dto) {
         Article a = articleMapper.selectById(dto.getId());
         if (a == null) return;
         BeanUtils.copyProperties(dto, a, "id");
         articleMapper.updateById(a);
-        // sync tags
-        articleTagMapper.delete(new LambdaQueryWrapper<ArticleTag>()
-            .eq(ArticleTag::getArticleId, dto.getId()));
+        articleTagMapper.delete(new LambdaQueryWrapper<ArticleTag>().eq(ArticleTag::getArticleId, dto.getId()));
         if (dto.getTagIds() != null) {
             for (Long tagId : dto.getTagIds()) {
                 ArticleTag at = new ArticleTag();
-                at.setArticleId(dto.getId());
-                at.setTagId(tagId);
+                at.setArticleId(dto.getId()); at.setTagId(tagId);
                 articleTagMapper.insert(at);
             }
         }
     }
 
-    @Override
-    public void delete(Long id) {
-        articleMapper.deleteById(id);
-    }
+    @Override public void delete(Long id) { articleMapper.deleteById(id); }
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Component
 public class SystemLogAspect {
+
     @Pointcut("@annotation(com.konblog.annotation.SystemLog)")
     public void pt() {}
 
@@ -25,7 +26,8 @@ public class SystemLogAspect {
             MethodSignature sig = (MethodSignature) pjp.getSignature();
             SystemLog ann = sig.getMethod().getAnnotation(SystemLog.class);
             String desc = ann != null ? ann.value() : "";
-            log.info("[AOP] {}.{}() {} cost={}ms", sig.getDeclaringType().getSimpleName(), sig.getMethod().getName(), desc, cost);
+            String method = sig.getDeclaringType().getSimpleName() + "." + sig.getMethod().getName();
+            log.info("[AOP] {} {} cost={}ms", method, desc, cost);
         }
         return ret;
     }

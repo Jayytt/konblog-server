@@ -8,4 +8,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(\
+@RequestMapping("/menu")
+@SaCheckRole("admin")
+@RequiredArgsConstructor
+public class MenuController {
+    private final MenuService menuService;
+    @GetMapping("/admin/tree") public Result<List<Menu>> tree() { return Result.success(menuService.tree()); }
+}

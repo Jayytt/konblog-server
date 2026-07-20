@@ -4,4 +4,5 @@ import lombok.Data;
 import java.time.LocalDateTime;
 @Data public class CategoryVO {
     private Long id; private String name, description, status; private Long articleCount;
-    @JsonFormat(pattern=\
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm") private LocalDateTime createTime;
+}

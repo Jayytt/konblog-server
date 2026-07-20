@@ -21,4 +21,7 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
     }
     @Override public void update(TagDTO dto) {
         Tag t = getById(dto.getId());
-        if (t == null) return; BeanUtils.copyProperties(dto, t, \
+        if (t == null) return; BeanUtils.copyProperties(dto, t, "id"); updateById(t);
+    }
+    @Override public void delete(Long id) { removeById(id); }
+}

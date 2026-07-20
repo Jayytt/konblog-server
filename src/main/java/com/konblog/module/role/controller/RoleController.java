@@ -9,4 +9,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(\
+@RequestMapping("/role")
+@SaCheckRole("admin")
+@RequiredArgsConstructor
+public class RoleController {
+    private final RoleService roleService;
+    @GetMapping("/admin/list") public Result<List<Role>> list() { return Result.success(roleService.listAll()); }
+    @PostMapping("/admin") public Result<Void> create(@RequestBody RoleDTO dto) { roleService.create(dto); return Result.success(); }
+    @PutMapping("/admin") public Result<Void> update(@RequestBody RoleDTO dto) { roleService.update(dto); return Result.success(); }
+    @DeleteMapping("/admin/{id}") public Result<Void> delete(@PathVariable Long id) { roleService.delete(id); return Result.success(); }
+}
