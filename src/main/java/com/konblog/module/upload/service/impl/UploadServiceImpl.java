@@ -21,6 +21,7 @@ public class UploadServiceImpl implements UploadService {
     }
 
     @Value("${upload.minio.bucket:konblog}") private String bucket;
+    @Value("${upload.minio.endpoint:http://localhost:9000}") private String endpoint;
 
     @Override
     public String upload(MultipartFile file) {
@@ -34,7 +35,7 @@ public class UploadServiceImpl implements UploadService {
                 .bucket(bucket).object(objectName)
                 .stream(file.getInputStream(), file.getSize(), -1)
                 .contentType(file.getContentType()).build());
-            return String.format("%s/%s/%s", minioClient.getEndpoint(), bucket, objectName);
+            return endpoint + "/" + bucket + "/" + objectName;
         } catch (Exception e) {
             log.error("Upload failed", e);
             throw new RuntimeException("Upload failed: " + e.getMessage());

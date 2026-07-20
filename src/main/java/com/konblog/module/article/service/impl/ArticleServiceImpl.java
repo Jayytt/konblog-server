@@ -33,7 +33,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Override
     public PageVO<ArticleListVO> pageList(long current, long size) {
-        Page<Article> page = articleMapper.selectPage(new Page<>(current, size),
+        Page<Article> page = getBaseMapper().selectPage(new Page<>(current, size),
             new LambdaQueryWrapper<Article>().orderByDesc(Article::getIsTop, Article::getCreateTime));
         JdbcTemplate jdbc = new JdbcTemplate(dataSource);
         List<ArticleListVO> vos = page.getRecords().stream().map(a -> {
@@ -50,10 +50,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Override
     public ArticleDetailVO getDetail(Long id) {
-        Article a = articleMapper.selectById(id);
+        Article a = getBaseMapper().selectById(id);
         if (a == null) return null;
         a.setViewCount((a.getViewCount() == null ? 0 : a.getViewCount()) + 1);
-        articleMapper.updateById(a);
+        getBaseMapper().updateById(a);
         ArticleDetailVO vo = new ArticleDetailVO();
         BeanUtils.copyProperties(a, vo);
         JdbcTemplate jdbc = new JdbcTemplate(dataSource);
@@ -67,7 +67,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         Article a = new Article();
         BeanUtils.copyProperties(dto, a);
         a.setViewCount(0L);
-        articleMapper.insert(a);
+        getBaseMapper().insert(a);
         if (dto.getTagIds() != null) {
             for (Long tagId : dto.getTagIds()) {
                 ArticleTag at = new ArticleTag();
@@ -80,10 +80,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Override @Transactional
     public void updateArticle(AddArticleDTO dto) {
-        Article a = articleMapper.selectById(dto.getId());
+        Article a = getBaseMapper().selectById(dto.getId());
         if (a == null) return;
         BeanUtils.copyProperties(dto, a, "id");
-        articleMapper.updateById(a);
+        getBaseMapper().updateById(a);
         articleTagMapper.delete(new LambdaQueryWrapper<ArticleTag>().eq(ArticleTag::getArticleId, dto.getId()));
         if (dto.getTagIds() != null) {
             for (Long tagId : dto.getTagIds()) {
@@ -94,5 +94,5 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         }
     }
 
-    @Override public void delete(Long id) { articleMapper.deleteById(id); }
+    @Override public void delete(Long id) { getBaseMapper().deleteById(id); }
 }
