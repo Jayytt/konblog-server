@@ -4,16 +4,15 @@ import com.konblog.common.result.Result;
 import com.konblog.module.role.dto.RoleDTO;
 import com.konblog.module.role.entity.Role;
 import com.konblog.module.role.service.RoleService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
 @RequestMapping("/role")
 @SaCheckRole("admin")
-@RequiredArgsConstructor
 public class RoleController {
     private final RoleService roleService;
+    public RoleController(RoleService roleService) { this.roleService = roleService; }
     @GetMapping("/admin/list") public Result<List<Role>> list() { return Result.success(roleService.listAll()); }
     @PostMapping("/admin") public Result<Void> create(@RequestBody RoleDTO dto) { roleService.create(dto); return Result.success(); }
     @PutMapping("/admin") public Result<Void> update(@RequestBody RoleDTO dto) { roleService.update(dto); return Result.success(); }

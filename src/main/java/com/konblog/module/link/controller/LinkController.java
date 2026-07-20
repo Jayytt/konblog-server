@@ -4,15 +4,14 @@ import com.konblog.common.result.Result;
 import com.konblog.module.link.dto.LinkDTO;
 import com.konblog.module.link.entity.Link;
 import com.konblog.module.link.service.LinkService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
 @RequestMapping("/link")
-@RequiredArgsConstructor
 public class LinkController {
     private final LinkService linkService;
+    public LinkController(LinkService linkService) { this.linkService = linkService; }
     @GetMapping("/user/list") public Result<List<Link>> userList() { return Result.success(linkService.listAll()); }
     @GetMapping("/admin/list") @SaCheckRole("admin") public Result<List<Link>> adminList() { return Result.success(linkService.listAll()); }
     @PostMapping("/admin") @SaCheckRole("admin") public Result<Long> create(@RequestBody LinkDTO dto) { return Result.success(linkService.create(dto)); }

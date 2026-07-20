@@ -7,7 +7,6 @@ import com.konblog.module.user.dto.UserDTO;
 import com.konblog.module.user.entity.User;
 import com.konblog.module.user.service.UserService;
 import com.konblog.module.user.vo.UserVO;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -15,9 +14,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/user")
 @SaCheckRole("admin")
-@RequiredArgsConstructor
 public class UserAdminController {
     private final UserService userService;
+    public UserAdminController(UserService userService) { this.userService = userService; }
+
     @GetMapping("/admin/page") public Result<PageVO<UserVO>> page(@RequestParam(defaultValue="1") long current, @RequestParam(defaultValue="10") long size) {
         Page<User> p = userService.page(new Page<>(current, size));
         List<UserVO> vos = p.getRecords().stream().map(u -> {
