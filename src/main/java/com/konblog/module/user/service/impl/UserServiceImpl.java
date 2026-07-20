@@ -31,7 +31,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }).toList();
     }
     @Override public UserVO getById(Long id) {
-        User u = getById(id); UserVO vo = new UserVO(); BeanUtils.copyProperties(u, vo); vo.setRoleIds(getRoleIdsInternal(id)); return vo;
+        User u = super.getById(id); UserVO vo = new UserVO(); BeanUtils.copyProperties(u, vo); vo.setRoleIds(getRoleIdsInternal(id)); return vo;
     }
     @Override @Transactional public void create(UserDTO dto) {
         User u = new User(); BeanUtils.copyProperties(dto, u);
