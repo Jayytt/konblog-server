@@ -1,17 +1,18 @@
 package com.konblog.aspect;
 import com.konblog.annotation.SystemLog;
-import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-@Slf4j
 @Aspect
 @Component
 public class SystemLogAspect {
+    private static final Logger log = LoggerFactory.getLogger(SystemLogAspect.class);
 
     @Pointcut("@annotation(com.konblog.annotation.SystemLog)")
     public void pt() {}

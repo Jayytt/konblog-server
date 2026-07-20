@@ -1,20 +1,21 @@
 package com.konblog.runner;
-
 import com.konblog.module.user.entity.User;
 import com.konblog.module.user.mapper.UserMapper;
-import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 
 @Component
-@RequiredArgsConstructor
 public class PasswordMigrationRunner implements ApplicationRunner {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+
+    public PasswordMigrationRunner(UserMapper userMapper, PasswordEncoder passwordEncoder) {
+        this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public void run(ApplicationArguments args) {

@@ -6,18 +6,21 @@ import com.konblog.module.user.dto.LoginDTO;
 import com.konblog.module.user.entity.User;
 import com.konblog.module.user.mapper.UserMapper;
 import com.konblog.module.user.vo.LoginVO;
-import cn.dev33.satoken.stp.SaSession;
+import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class AuthService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+
+    public AuthService(UserMapper userMapper, PasswordEncoder passwordEncoder) {
+        this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public LoginVO login(LoginDTO dto) {
         User u = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getUserName, dto.getUsername()));
@@ -30,10 +33,12 @@ public class AuthService {
         s.set("roles", List.of("admin"));
         s.set("permissions", List.of("*"));
         LoginVO vo = new LoginVO();
-        vo.setToken(StpUtil.getTokenValue()); vo.setUserId(u.getId());
-        vo.setUsername(u.getUserName()); vo.setNickName(u.getNickName()); vo.setAvatar(u.getAvatar());
+        vo.setToken(StpUtil.getTokenValue());
+        vo.setUserId(u.getId());
+        vo.setUsername(u.getUserName());
+        vo.setNickName(u.getNickName());
+        vo.setAvatar(u.getAvatar());
         return vo;
     }
-
     public void logout() { StpUtil.logout(); }
 }

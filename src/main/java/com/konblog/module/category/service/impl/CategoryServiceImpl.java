@@ -6,13 +6,11 @@ import com.konblog.module.category.entity.Category;
 import com.konblog.module.category.mapper.CategoryMapper;
 import com.konblog.module.category.service.CategoryService;
 import com.konblog.module.category.vo.CategoryVO;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> implements CategoryService {
     @Override public List<CategoryVO> listAll() {
         return list(new LambdaQueryWrapper<Category>().orderByAsc(Category::getCreateTime)).stream().map(c -> {

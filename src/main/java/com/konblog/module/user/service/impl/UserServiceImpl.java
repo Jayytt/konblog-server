@@ -1,4 +1,5 @@
 package com.konblog.module.user.service.impl;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.konblog.module.user.dto.UserDTO;
 import com.konblog.module.user.entity.User;
@@ -7,7 +8,6 @@ import com.konblog.module.user.mapper.UserMapper;
 import com.konblog.module.user.mapper.UserRoleMapper;
 import com.konblog.module.user.service.UserService;
 import com.konblog.module.user.vo.UserVO;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,13 +15,17 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
     private final UserRoleMapper userRoleMapper;
     private final PasswordEncoder passwordEncoder;
 
+    public UserServiceImpl(UserRoleMapper userRoleMapper, PasswordEncoder passwordEncoder) {
+        this.userRoleMapper = userRoleMapper;
+        this.passwordEncoder = passwordEncoder;
+    }
+
     private List<Long> getRoleIdsInternal(Long userId) {
-        return userRoleMapper.selectList(new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<UserRole>().eq(UserRole::getUserId, userId)).stream().map(UserRole::getRoleId).toList();
+        return userRoleMapper.selectList(new LambdaQueryWrapper<UserRole>().eq(UserRole::getUserId, userId)).stream().map(UserRole::getRoleId).toList();
     }
 
     @Override public List<UserVO> listAll() {
@@ -44,9 +48,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
     }
     @Override @Transactional public void update(UserDTO dto) {
-        User u = getById(dto.getId()); if (u == null) return;
+        User u = super.getById(dto.getId()); if (u == null) return;
         BeanUtils.copyProperties(dto, u, "id", "password"); updateById(u);
-        userRoleMapper.delete(new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<UserRole>().eq(UserRole::getUserId, dto.getId()));
+        userRoleMapper.delete(new LambdaQueryWrapper<UserRole>().eq(UserRole::getUserId, dto.getId()));
         if (dto.getRoleIds() != null) {
             for (Long rid : dto.getRoleIds()) { UserRole ur = new UserRole(); ur.setUserId(dto.getId()); ur.setRoleId(rid); userRoleMapper.insert(ur); }
         }

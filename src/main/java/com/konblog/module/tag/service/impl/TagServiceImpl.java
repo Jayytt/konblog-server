@@ -5,13 +5,11 @@ import com.konblog.module.tag.dto.TagDTO;
 import com.konblog.module.tag.entity.Tag;
 import com.konblog.module.tag.mapper.TagMapper;
 import com.konblog.module.tag.service.TagService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagService {
     @Override public List<Tag> listAll() {
         return list(new LambdaQueryWrapper<Tag>().orderByAsc(Tag::getCreateTime));

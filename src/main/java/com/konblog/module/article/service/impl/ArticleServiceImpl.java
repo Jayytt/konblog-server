@@ -11,7 +11,8 @@ import com.konblog.module.article.mapper.ArticleTagMapper;
 import com.konblog.module.article.service.ArticleService;
 import com.konblog.module.article.vo.ArticleDetailVO;
 import com.konblog.module.article.vo.ArticleListVO;
-import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -20,10 +21,15 @@ import javax.sql.DataSource;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements ArticleService {
+    private static final Logger log = LoggerFactory.getLogger(ArticleServiceImpl.class);
     private final ArticleTagMapper articleTagMapper;
     private final DataSource dataSource;
+
+    public ArticleServiceImpl(ArticleTagMapper articleTagMapper, DataSource dataSource) {
+        this.articleTagMapper = articleTagMapper;
+        this.dataSource = dataSource;
+    }
 
     @Override
     public PageVO<ArticleListVO> pageList(long current, long size) {

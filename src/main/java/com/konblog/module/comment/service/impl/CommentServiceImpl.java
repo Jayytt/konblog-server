@@ -5,13 +5,11 @@ import com.konblog.module.comment.dto.CommentDTO;
 import com.konblog.module.comment.entity.Comment;
 import com.konblog.module.comment.mapper.CommentMapper;
 import com.konblog.module.comment.service.CommentService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> implements CommentService {
     @Override public List<Comment> listByArticle(Long articleId) {
         return list(new LambdaQueryWrapper<Comment>().eq(Comment::getArticleId, articleId).orderByAsc(Comment::getCreateTime));

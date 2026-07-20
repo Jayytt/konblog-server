@@ -5,13 +5,11 @@ import com.konblog.module.link.dto.LinkDTO;
 import com.konblog.module.link.entity.Link;
 import com.konblog.module.link.mapper.LinkMapper;
 import com.konblog.module.link.service.LinkService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements LinkService {
     @Override public List<Link> listAll() {
         return list(new LambdaQueryWrapper<Link>().orderByAsc(Link::getCreateTime));

@@ -13,7 +13,6 @@ public class StpInterfaceImpl implements StpInterface {
         SaSession s = StpUtil.getSessionByLoginId(loginId);
         return s == null ? new ArrayList<>() : s.get("permissions", ArrayList::new);
     }
-
     @Override
     public List<String> getRoleList(Object loginId, String loginType) {
         SaSession s = StpUtil.getSessionByLoginId(loginId);
