@@ -33,4 +33,73 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         List<ArticleListVO> vos = page.getRecords().stream().map(a -> {
             ArticleListVO vo = new ArticleListVO();
             BeanUtils.copyProperties(a, vo);
-            try { vo.setCategoryName(jdbc.queryForObject(\
+            try {
+                vo.setCategoryName(jdbc.queryForObject(
+                    "SELECT name FROM sg_category WHERE id = ?", String.class, a.getCategoryId()));
+            } catch (Exception e) { vo.setCategoryName("未分类"); }
+            return vo;
+        }).toList();
+        Page<ArticleListVO> voPage = new Page<>(current, size, page.getTotal());
+        voPage.setRecords(vos);
+        return PageVO.of(voPage);
+    }
+
+    @Override
+    public ArticleDetailVO getDetail(Long id) {
+        Article a = articleMapper.selectById(id);
+        if (a == null) return null;
+        a.setViewCount((a.getViewCount() == null ? 0 : a.getViewCount()) + 1);
+        articleMapper.updateById(a);
+        ArticleDetailVO vo = new ArticleDetailVO();
+        BeanUtils.copyProperties(a, vo);
+        JdbcTemplate jdbc = new JdbcTemplate(dataSource);
+        try {
+            vo.setCategoryName(jdbc.queryForObject(
+                "SELECT name FROM sg_category WHERE id = ?", String.class, a.getCategoryId()));
+        } catch (Exception e) { vo.setCategoryName("未分类"); }
+        return vo;
+    }
+
+    @Override
+    @Transactional
+    public Long create(AddArticleDTO dto) {
+        Article a = new Article();
+        BeanUtils.copyProperties(dto, a);
+        a.setViewCount(0L);
+        articleMapper.insert(a);
+        if (dto.getTagIds() != null) {
+            for (Long tagId : dto.getTagIds()) {
+                ArticleTag at = new ArticleTag();
+                at.setArticleId(a.getId());
+                at.setTagId(tagId);
+                articleTagMapper.insert(at);
+            }
+        }
+        return a.getId();
+    }
+
+    @Override
+    @Transactional
+    public void update(AddArticleDTO dto) {
+        Article a = articleMapper.selectById(dto.getId());
+        if (a == null) return;
+        BeanUtils.copyProperties(dto, a, "id");
+        articleMapper.updateById(a);
+        // sync tags
+        articleTagMapper.delete(new LambdaQueryWrapper<ArticleTag>()
+            .eq(ArticleTag::getArticleId, dto.getId()));
+        if (dto.getTagIds() != null) {
+            for (Long tagId : dto.getTagIds()) {
+                ArticleTag at = new ArticleTag();
+                at.setArticleId(dto.getId());
+                at.setTagId(tagId);
+                articleTagMapper.insert(at);
+            }
+        }
+    }
+
+    @Override
+    public void delete(Long id) {
+        articleMapper.deleteById(id);
+    }
+}
