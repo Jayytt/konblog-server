@@ -6,8 +6,8 @@ import java.time.LocalDateTime;
 @TableName("sys_user")
 public class User implements Serializable {
     @TableId(type = IdType.AUTO) private Long id;
-    private String userName, password, nickName, email, phonenumber, sex, avatar, status, loginIp;
-    private LocalDateTime loginDate, createTime, updateTime;
+    private String userName, password, nickName, type, status, email, phonenumber, sex, avatar;
+    private LocalDateTime createTime, updateTime;
     private Long createBy, updateBy;
     @TableLogic private Integer delFlag;
 
@@ -19,6 +19,10 @@ public class User implements Serializable {
     public void setPassword(String password) { this.password = password; }
     public String getNickName() { return nickName; }
     public void setNickName(String nickName) { this.nickName = nickName; }
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
     public String getPhonenumber() { return phonenumber; }
@@ -27,12 +31,6 @@ public class User implements Serializable {
     public void setSex(String sex) { this.sex = sex; }
     public String getAvatar() { return avatar; }
     public void setAvatar(String avatar) { this.avatar = avatar; }
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
-    public String getLoginIp() { return loginIp; }
-    public void setLoginIp(String loginIp) { this.loginIp = loginIp; }
-    public LocalDateTime getLoginDate() { return loginDate; }
-    public void setLoginDate(LocalDateTime loginDate) { this.loginDate = loginDate; }
     public LocalDateTime getCreateTime() { return createTime; }
     public void setCreateTime(LocalDateTime createTime) { this.createTime = createTime; }
     public LocalDateTime getUpdateTime() { return updateTime; }
