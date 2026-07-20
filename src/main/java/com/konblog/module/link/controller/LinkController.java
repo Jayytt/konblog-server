@@ -15,6 +15,6 @@ public class LinkController {
     @GetMapping("/user/list") public Result<List<Link>> userList() { return Result.success(linkService.listAll()); }
     @GetMapping("/admin/list") @SaCheckRole("admin") public Result<List<Link>> adminList() { return Result.success(linkService.listAll()); }
     @PostMapping("/admin") @SaCheckRole("admin") public Result<Long> create(@RequestBody LinkDTO dto) { return Result.success(linkService.create(dto)); }
-    @PutMapping("/admin") @SaCheckRole("admin") public Result<Void> update(@RequestBody LinkDTO dto) { linkService.update(dto); return Result.success(); }
+    @PutMapping("/admin") @SaCheckRole("admin") public Result<Void> update(@RequestBody LinkDTO dto) { linkService.updateLink(dto); return Result.success(); }
     @DeleteMapping("/admin/{id}") @SaCheckRole("admin") public Result<Void> delete(@PathVariable Long id) { linkService.delete(id); return Result.success(); }
 }

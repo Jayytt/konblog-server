@@ -25,7 +25,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         Role r = new Role(); BeanUtils.copyProperties(dto, r); save(r);
         if (dto.getMenuIds() != null) assignMenus(r.getId(), dto.getMenuIds());
     }
-    @Override @Transactional public void update(RoleDTO dto) {
+    @Override @Transactional public void updateRole(RoleDTO dto) {
         Role r = getById(dto.getId()); if (r == null) return;
         BeanUtils.copyProperties(dto, r, "id"); updateById(r);
         roleMenuMapper.delete(new LambdaQueryWrapper<RoleMenu>().eq(RoleMenu::getRoleId, dto.getId()));

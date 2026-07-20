@@ -15,6 +15,6 @@ public class CategoryController {
     @GetMapping("/user/list") public Result<List<CategoryVO>> userList() { return Result.success(categoryService.listAll()); }
     @GetMapping("/admin/list") @SaCheckRole("admin") public Result<List<CategoryVO>> adminList() { return Result.success(categoryService.listAll()); }
     @PostMapping("/admin") @SaCheckRole("admin") public Result<Long> create(@RequestBody CategoryDTO dto) { return Result.success(categoryService.create(dto)); }
-    @PutMapping("/admin") @SaCheckRole("admin") public Result<Void> update(@RequestBody CategoryDTO dto) { categoryService.update(dto); return Result.success(); }
+    @PutMapping("/admin") @SaCheckRole("admin") public Result<Void> update(@RequestBody CategoryDTO dto) { categoryService.updateCategory(dto); return Result.success(); }
     @DeleteMapping("/admin/{id}") @SaCheckRole("admin") public Result<Void> delete(@PathVariable Long id) { categoryService.delete(id); return Result.success(); }
 }

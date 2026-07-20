@@ -17,7 +17,7 @@ public class LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements Li
     @Override public Long create(LinkDTO dto) {
         Link l = new Link(); BeanUtils.copyProperties(dto, l); save(l); return l.getId();
     }
-    @Override public void update(LinkDTO dto) {
+    @Override public void updateLink(LinkDTO dto) {
         Link l = getById(dto.getId());
         if (l == null) return; BeanUtils.copyProperties(dto, l, "id"); updateById(l);
     }

@@ -79,7 +79,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override @Transactional
-    public void update(AddArticleDTO dto) {
+    public void updateArticle(AddArticleDTO dto) {
         Article a = articleMapper.selectById(dto.getId());
         if (a == null) return;
         BeanUtils.copyProperties(dto, a, "id");

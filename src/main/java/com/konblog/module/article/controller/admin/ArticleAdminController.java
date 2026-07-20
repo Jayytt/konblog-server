@@ -22,7 +22,7 @@ public class ArticleAdminController {
     @SystemLog("create")
     @PostMapping public Result<Long> create(@RequestBody AddArticleDTO dto) { return Result.success(articleService.create(dto)); }
     @SystemLog("update")
-    @PutMapping public Result<Void> update(@RequestBody AddArticleDTO dto) { articleService.update(dto); return Result.success(); }
+    @PutMapping public Result<Void> update(@RequestBody AddArticleDTO dto) { articleService.updateArticle(dto); return Result.success(); }
     @SystemLog("delete")
     @DeleteMapping("/{id}") public Result<Void> delete(@PathVariable Long id) { articleService.delete(id); return Result.success(); }
 }

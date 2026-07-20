@@ -20,7 +20,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     @Override public Long create(CategoryDTO dto) {
         Category e = new Category(); BeanUtils.copyProperties(dto, e); save(e); return e.getId();
     }
-    @Override public void update(CategoryDTO dto) {
+    @Override public void updateCategory(CategoryDTO dto) {
         Category e = getById(dto.getId());
         if (e == null) return;
         BeanUtils.copyProperties(dto, e, "id");

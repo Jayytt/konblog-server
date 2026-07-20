@@ -17,7 +17,7 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
     @Override public Long create(TagDTO dto) {
         Tag t = new Tag(); BeanUtils.copyProperties(dto, t); save(t); return t.getId();
     }
-    @Override public void update(TagDTO dto) {
+    @Override public void updateTag(TagDTO dto) {
         Tag t = getById(dto.getId());
         if (t == null) return; BeanUtils.copyProperties(dto, t, "id"); updateById(t);
     }
