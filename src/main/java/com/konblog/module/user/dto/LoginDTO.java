@@ -2,8 +2,8 @@ package com.konblog.module.user.dto;
 import jakarta.validation.constraints.NotBlank;
 
 public class LoginDTO {
-    @NotBlank(message = "user") private String username;
-    @NotBlank(message = "pwd") private String password;
+    @NotBlank(message = "用户名不能为空") private String username;
+    @NotBlank(message = "密码不能为空") private String password;
 
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
